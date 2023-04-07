@@ -205,7 +205,7 @@ void lemlib::Chassis::follow(const char* filePath, int timeout, float lookahead,
     float leftInput = 0;
     float rightInput = 0;
     // commented out because of pros 4 bug
-    //int compState = pros::competition::get_status();
+    // int compState = pros::competition::get_status();
 
     // loop until the robot is within the end tolerance
     // commented out because of pros 4 bug

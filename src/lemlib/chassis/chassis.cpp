@@ -101,7 +101,7 @@ void lemlib::Chassis::turnTo(float x, float y, int timeout, bool reversed, float
     float deltaX, deltaY, deltaTheta;
     float motorPower;
     // commented out because of pros 4 bug
-    //std::uint8_t compState = pros::competition::get_status();
+    // std::uint8_t compState = pros::competition::get_status();
 
     // create a new PID controller
     FAPID pid = FAPID(0, 0, angularSettings.kP, 0, angularSettings.kD, "angularPID");
@@ -110,7 +110,7 @@ void lemlib::Chassis::turnTo(float x, float y, int timeout, bool reversed, float
 
     // main loop
     // commented out because of pros 4 bug
-    //while (pros::competition::get_status() == compState && !pid.settled()) {
+    // while (pros::competition::get_status() == compState && !pid.settled()) {
     while (!pid.settled()) {
         // update variables
         pose = getPose();
@@ -160,7 +160,7 @@ void lemlib::Chassis::moveTo(float x, float y, int timeout, float maxSpeed, bool
     bool close = false;
     int start = pros::millis();
     // commented out because of pros 4 bug
-    //std::uint8_t compState = pros::competition::get_status();
+    // std::uint8_t compState = pros::competition::get_status();
 
     // create a new PID controller
     FAPID lateralPID(0, 0, lateralSettings.kP, 0, lateralSettings.kD, "lateralPID");

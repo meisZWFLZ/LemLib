@@ -13,50 +13,21 @@ pros::adi::Encoder verticalEnc('A', 'B', false);
 // vertical tracking wheel. 2.75" diameter, 2.2" offset
 lemlib::TrackingWheel vertical(&verticalEnc, 2.75, 0);
 
-
 // drivetrain
 lemlib::Drivetrain_t drivetrain {
-	&leftMotors,
-	&rightMotors,
-	10,
-	3.25,
-	360,
+    &leftMotors, &rightMotors, 10, 3.25, 360,
 };
 
 // lateral motion controller
-lemlib::ChassisController_t lateralController {
-	10,
-	30,
-	1,
-	100,
-	3,
-	500,
-	20
-};
+lemlib::ChassisController_t lateralController {10, 30, 1, 100, 3, 500, 20};
 
 // angular motion controller
-lemlib::ChassisController_t angularController {
-	2,
-	10,
-	1,
-	100,
-	3,
-	500,
-	3
-};
+lemlib::ChassisController_t angularController {2, 10, 1, 100, 3, 500, 3};
 
 // sensors for odometry
-lemlib::OdomSensors_t sensors {
-	nullptr,
-	nullptr,
-	nullptr,
-	nullptr,
-	&imu
-};
-
+lemlib::OdomSensors_t sensors {nullptr, nullptr, nullptr, nullptr, &imu};
 
 lemlib::Chassis chassis(drivetrain, lateralController, angularController, sensors);
-
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -65,17 +36,16 @@ lemlib::Chassis chassis(drivetrain, lateralController, angularController, sensor
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
-	pros::lcd::initialize();
-	// calibrate sensors
-	chassis.calibrate();
-	while (true) {
-		pros::lcd::print(0, "X: %f", chassis.getPose().x);
-		pros::lcd::print(1, "Y: %f", chassis.getPose().y);
-		pros::lcd::print(2, "Theta: %f", chassis.getPose().theta);
-		pros::delay(10);
-	}
+    pros::lcd::initialize();
+    // calibrate sensors
+    chassis.calibrate();
+    while (true) {
+        pros::lcd::print(0, "X: %f", chassis.getPose().x);
+        pros::lcd::print(1, "Y: %f", chassis.getPose().y);
+        pros::lcd::print(2, "Theta: %f", chassis.getPose().theta);
+        pros::delay(10);
+    }
 }
-
 
 /**
  * Runs while the robot is in the disabled state of Field Management System or
@@ -83,7 +53,6 @@ void initialize() {
  * the robot is enabled, this task will exit.
  */
 void disabled() {}
-
 
 /**
  * Runs after initialize(), and before autonomous when connected to the Field
@@ -96,7 +65,6 @@ void disabled() {}
  */
 void competition_initialize() {}
 
-
 /**
  * Runs the user autonomous code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
@@ -108,10 +76,7 @@ void competition_initialize() {}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous() {
-	chassis.moveTo(20, 0, 4000);
-}
-
+void autonomous() { chassis.moveTo(20, 0, 4000); }
 
 /**
  * Runs the operator control code. This function will be started in its own task
@@ -126,5 +91,4 @@ void autonomous() {
  * operator control task will be stopped. Re-enabling the robot will restart the
  * task, not resume it from where it left off.
  */
-void opcontrol() {
-}
+void opcontrol() {}
