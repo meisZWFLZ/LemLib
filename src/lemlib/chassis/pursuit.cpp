@@ -204,10 +204,13 @@ void lemlib::Chassis::follow(const char* filePath, int timeout, float lookahead,
     int closestPoint;
     float leftInput = 0;
     float rightInput = 0;
-    int compState = pros::competition::get_status();
+    // commented out because of pros 4 bug
+    //int compState = pros::competition::get_status();
 
     // loop until the robot is within the end tolerance
-    for (int i = 0; i < timeout / 10 && pros::competition::get_status() == compState; i++) {
+    // commented out because of pros 4 bug
+    // for (int i = 0; i < timeout / 10 && pros::competition::get_status() == compState; i++) {
+    for (int i = 0; i < timeout / 10; i++) {
         // get the current position of the robot
         pose = this->getPose(true);
         if (reverse) pose.theta -= M_PI;

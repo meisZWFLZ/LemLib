@@ -1,24 +1,15 @@
 #include "main.h"
 #include "lemlib/api.hpp"
 
-
-// drive motors
-pros::Motor lF(-3, pros::E_MOTOR_GEARSET_06); // left front motor. port 3, reversed
-pros::Motor lM(-14, pros::E_MOTOR_GEARSET_06); // left middle motor. port 14, reversed
-pros::Motor lB(-12, pros::E_MOTOR_GEARSET_06); // left back motor. port 12, reversed
-pros::Motor rF(19, pros::E_MOTOR_GEARSET_06); // right front motor. port 19
-pros::Motor rM(20, pros::E_MOTOR_GEARSET_06); // right middle motor. port 20
-pros::Motor rB(1, pros::E_MOTOR_GEARSET_06); // right back motor. port 1
-
 // motor groups
-pros::MotorGroup leftMotors({lF, lM, lB}); // left motor group
-pros::MotorGroup rightMotors({rF, rM, rB}); // right motor group
+pros::v5::MotorGroup leftMotors({-3, -14, -12}, pros::v5::Motor_Gears::rpm_600); // left motor group
+pros::v5::MotorGroup rightMotors({19, 20, 1}, pros::v5::Motor_Gears::rpm_600); // right motor group
 
 // Inertial Sensor on port 6
-pros::Imu imu(6);
+pros::v5::Imu imu(6);
 
 // tracking wheels
-pros::ADIEncoder verticalEnc('A', 'B', false);
+pros::adi::Encoder verticalEnc('A', 'B', false);
 // vertical tracking wheel. 2.75" diameter, 2.2" offset
 lemlib::TrackingWheel vertical(&verticalEnc, 2.75, 0);
 

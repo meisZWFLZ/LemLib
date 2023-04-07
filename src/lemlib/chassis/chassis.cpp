@@ -100,7 +100,8 @@ void lemlib::Chassis::turnTo(float x, float y, int timeout, bool reversed, float
     float targetTheta;
     float deltaX, deltaY, deltaTheta;
     float motorPower;
-    std::uint8_t compState = pros::competition::get_status();
+    // commented out because of pros 4 bug
+    //std::uint8_t compState = pros::competition::get_status();
 
     // create a new PID controller
     FAPID pid = FAPID(0, 0, angularSettings.kP, 0, angularSettings.kD, "angularPID");
@@ -108,7 +109,9 @@ void lemlib::Chassis::turnTo(float x, float y, int timeout, bool reversed, float
                 angularSettings.smallErrorTimeout, timeout);
 
     // main loop
-    while (pros::competition::get_status() == compState && !pid.settled()) {
+    // commented out because of pros 4 bug
+    //while (pros::competition::get_status() == compState && !pid.settled()) {
+    while (!pid.settled()) {
         // update variables
         pose = getPose();
         pose.theta = (reversed) ? fmod(pose.theta - 180, 360) : fmod(pose.theta, 360);
@@ -156,7 +159,8 @@ void lemlib::Chassis::moveTo(float x, float y, int timeout, float maxSpeed, bool
     float prevAngularPower = 0;
     bool close = false;
     int start = pros::millis();
-    std::uint8_t compState = pros::competition::get_status();
+    // commented out because of pros 4 bug
+    //std::uint8_t compState = pros::competition::get_status();
 
     // create a new PID controller
     FAPID lateralPID(0, 0, lateralSettings.kP, 0, lateralSettings.kD, "lateralPID");
@@ -165,7 +169,9 @@ void lemlib::Chassis::moveTo(float x, float y, int timeout, float maxSpeed, bool
                        lateralSettings.smallErrorTimeout, timeout);
 
     // main loop
-    while (pros::competition::get_status() == compState && (!lateralPID.settled() || pros::millis() - start < 300)) {
+    // commented out because of pros 4 bug
+    // pros::competition::get_status() == compState && (!lateralPID.settled() || pros::millis() - start < 300)
+    while ((!lateralPID.settled() || pros::millis() - start < 300)) {
         // get the current position
         Pose pose = getPose();
         pose.theta = std::fmod(pose.theta, 360);

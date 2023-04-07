@@ -12,7 +12,7 @@
 #include <math.h>
 #include "lemlib/chassis/trackingWheel.hpp"
 #include "lemlib/util.hpp"
-#include "pros/llemu.hpp"
+#include "pros/abstract_motor.hpp"
 
 /**
  * @brief Create a new tracking wheel
@@ -22,7 +22,7 @@
  * @param distance distance between the tracking wheel and the center of rotation in inches
  * @param gearRatio gear ratio of the tracking wheel, defaults to 1
  */
-lemlib::TrackingWheel::TrackingWheel(pros::ADIEncoder* encoder, float diameter, float distance, float gearRatio) {
+lemlib::TrackingWheel::TrackingWheel(pros::adi::Encoder* encoder, float diameter, float distance, float gearRatio) {
     this->encoder = encoder;
     this->diameter = diameter;
     this->distance = distance;
@@ -37,7 +37,7 @@ lemlib::TrackingWheel::TrackingWheel(pros::ADIEncoder* encoder, float diameter, 
  * @param distance distance between the tracking wheel and the center of rotation in inches
  * @param gearRatio gear ratio of the tracking wheel, defaults to 1
  */
-lemlib::TrackingWheel::TrackingWheel(pros::Rotation* encoder, float diameter, float distance, float gearRatio) {
+lemlib::TrackingWheel::TrackingWheel(pros::v5::Rotation* encoder, float diameter, float distance, float gearRatio) {
     this->rotation = encoder;
     this->diameter = diameter;
     this->distance = distance;
@@ -52,7 +52,7 @@ lemlib::TrackingWheel::TrackingWheel(pros::Rotation* encoder, float diameter, fl
  * @param distance half the track width of the drivetrain in inches
  * @param rpm theoretical maximum rpm of the drivetrain wheels
  */
-lemlib::TrackingWheel::TrackingWheel(pros::Motor_Group* motors, float diameter, float distance, float rpm) {
+lemlib::TrackingWheel::TrackingWheel(pros::v5::MotorGroup* motors, float diameter, float distance, float rpm) {
     this->motors = motors;
     this->motors->set_encoder_units(pros::E_MOTOR_ENCODER_ROTATIONS);
     this->diameter = diameter;
@@ -82,15 +82,15 @@ float lemlib::TrackingWheel::getDistanceTraveled() {
         return (float(this->rotation->get_position()) * this->diameter * M_PI / 36000) / this->gearRatio;
     } else if (this->motors != nullptr) {
         // get distance traveled by each motor
-        std::vector<pros::motor_gearset_e_t> gearsets = this->motors->get_gearing();
-        std::vector<double> positions = this->motors->get_positions();
+        std::vector<pros::v5::Motor_Gears> gearsets = this->motors->get_gearing_all();
+        std::vector<double> positions = this->motors->get_position_all();
         std::vector<float> distances;
         for (int i = 0; i < this->motors->size(); i++) {
             float in;
             switch (gearsets[i]) {
-                case pros::E_MOTOR_GEARSET_36: in = 100; break;
-                case pros::E_MOTOR_GEARSET_18: in = 200; break;
-                case pros::E_MOTOR_GEARSET_06: in = 600; break;
+                case pros::v5::Motor_Gears::rpm_100: in = 100; break;
+                case pros::v5::Motor_Gears::rpm_200: in = 200; break;
+                case pros::v5::Motor_Gears::rpm_600: in = 600; break;
                 default: in = 200; break;
             }
             distances.push_back(positions[i] * (diameter * M_PI) * (rpm / in));

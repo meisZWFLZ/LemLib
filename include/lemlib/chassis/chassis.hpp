@@ -35,7 +35,7 @@ typedef struct {
         TrackingWheel* vertical2;
         TrackingWheel* horizontal1;
         TrackingWheel* horizontal2;
-        pros::Imu* imu;
+        pros::v5::Imu* imu;
 } OdomSensors_t;
 
 /**
@@ -75,8 +75,8 @@ typedef struct {
  * @param rpm the rpm of the wheels
  */
 typedef struct {
-        pros::Motor_Group* leftMotors;
-        pros::Motor_Group* rightMotors;
+        pros::v5::MotorGroup* leftMotors;
+        pros::v5::MotorGroup* rightMotors;
         float trackWidth;
         float wheelDiameter;
         float rpm;

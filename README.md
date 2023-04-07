@@ -1,4 +1,4 @@
-# LemLib
+# LemLib Pros 4 Beta
 
 Welcome to LemLib! This open-source PROS template aims to introduce common algorithms like Pure Pursuit and Odometry for new and experienced teams alike.
 
