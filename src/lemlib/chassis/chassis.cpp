@@ -15,6 +15,7 @@
 #include "lemlib/pid.hpp"
 #include "lemlib/chassis/chassis.hpp"
 #include "lemlib/chassis/odom.hpp"
+#include "pros/rtos.hpp"
 #include "trackingWheel.hpp"
 
 /**
@@ -31,6 +32,8 @@ lemlib::Chassis::Chassis(Drivetrain_t drivetrain, ChassisController_t lateralSet
     this->lateralSettings = lateralSettings;
     this->angularSettings = angularSettings;
     this->odomSensors = sensors;
+
+    this->startedAt = pros::millis();
 }
 
 /**
@@ -229,4 +232,8 @@ void lemlib::Chassis::moveTo(float x, float y, int timeout, float maxSpeed, bool
     // stop the drivetrain
     drivetrain.leftMotors->move(0);
     drivetrain.rightMotors->move(0);
+}
+
+float lemlib::Chassis::getTime() {
+    return pros::millis() - this->startedAt;
 }

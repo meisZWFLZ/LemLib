@@ -82,15 +82,15 @@ float lemlib::TrackingWheel::getDistanceTraveled() {
         return (float(this->rotation->get_position()) * this->diameter * M_PI / 36000) / this->gearRatio;
     } else if (this->motors != nullptr) {
         // get distance traveled by each motor
-        std::vector<pros::v5::Motor_Gears> gearsets = this->motors->get_gearing_all();
+        std::vector<pros::v5::MotorGears> gearsets = this->motors->get_gearing_all();
         std::vector<double> positions = this->motors->get_position_all();
         std::vector<float> distances;
         for (int i = 0; i < this->motors->size(); i++) {
             float in;
             switch (gearsets[i]) {
-                case pros::v5::Motor_Gears::rpm_100: in = 100; break;
-                case pros::v5::Motor_Gears::rpm_200: in = 200; break;
-                case pros::v5::Motor_Gears::rpm_600: in = 600; break;
+                case pros::v5::MotorGears::rpm_100: in = 100; break;
+                case pros::v5::MotorGears::rpm_200: in = 200; break;
+                case pros::v5::MotorGears::rpm_600: in = 600; break;
                 default: in = 200; break;
             }
             distances.push_back(positions[i] * (diameter * M_PI) * (rpm / in));

@@ -164,10 +164,17 @@ class Chassis {
          */
         void follow(const char* filePath, int timeout, float lookahead, bool reverse = false, float maxSpeed = 127,
                     bool log = false);
+        /**
+         * @brief Get the amount of time the chassis has been initialized for
+         * 
+         * @return float - time in milliseconds
+         */
+        float getTime();
     private:
         ChassisController_t lateralSettings;
         ChassisController_t angularSettings;
         Drivetrain_t drivetrain;
         OdomSensors_t odomSensors;
+        float startedAt;
 };
 } // namespace lemlib
