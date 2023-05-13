@@ -26,7 +26,7 @@ class OdometryPage : public Page {
         OdometryPage(lemlib::Chassis* chassis) : Page(chassis, "Odometry") {}
 
         void destroy() { std::cout << "Odometry Page Destroyed" << std::endl; }
-        
+
         void initialize() {
             std::cout << "Odometry Page Initialized" << std::endl;
 
@@ -37,13 +37,14 @@ class OdometryPage : public Page {
             std::string tValueString = getStringFromFloat(pose.theta) + "°";
 
             lv_disp_t* display = lv_disp_get_default();
-            lv_theme_t* theme = lv_theme_default_init(display, lv_palette_main(LV_PALETTE_BLUE), lv_palette_main(LV_PALETTE_RED), true, LV_FONT_DEFAULT);
+            lv_theme_t* theme = lv_theme_default_init(display, lv_palette_main(LV_PALETTE_BLUE),
+                                                      lv_palette_main(LV_PALETTE_RED), true, LV_FONT_DEFAULT);
             lv_disp_set_theme(display, theme);
 
             this->screen = lv_obj_create(NULL);
             lv_obj_clear_flag(this->screen, LV_OBJ_FLAG_SCROLLABLE);
             lv_obj_set_style_bg_color(this->screen, lv_color_hex(0x262626), LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_obj_set_style_bg_opa(this->screen, 255, LV_PART_MAIN | LV_STATE_DEFAULT);    
+            lv_obj_set_style_bg_opa(this->screen, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
             this->header = this->createLabel("Odometry", this->screen, 119, -84);
             lv_obj_set_style_text_font(this->header, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -51,16 +52,16 @@ class OdometryPage : public Page {
             this->xLabel = this->createLabel("X", this->screen, 43, -37);
             this->yLabel = this->createLabel("Y", this->screen, 43, -14);
             this->tLabel = this->createLabel("T", this->screen, 43, 9);
-    
+
             this->xValue = this->createLabel(xValueString, this->screen, 73, -37);
             lv_obj_set_style_text_color(this->xValue, lv_color_hex(0xA5A5A5), LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_text_opa(this->xValue, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_obj_set_style_text_font(this->xValue, &lv_font_montserrat_10, LV_PART_MAIN | LV_STATE_DEFAULT);            
+            lv_obj_set_style_text_font(this->xValue, &lv_font_montserrat_10, LV_PART_MAIN | LV_STATE_DEFAULT);
 
             this->yValue = this->createLabel(yValueString, this->screen, 73, -14);
             lv_obj_set_style_text_color(this->yValue, lv_color_hex(0xA5A5A5), LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_text_opa(this->yValue, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_obj_set_style_text_font(this->yValue, &lv_font_montserrat_10, LV_PART_MAIN | LV_STATE_DEFAULT);    
+            lv_obj_set_style_text_font(this->yValue, &lv_font_montserrat_10, LV_PART_MAIN | LV_STATE_DEFAULT);
 
             this->tValue = this->createLabel(tValueString, this->screen, 73, 9);
             lv_obj_set_style_text_color(this->tValue, lv_color_hex(0xA5A5A5), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -77,12 +78,15 @@ class OdometryPage : public Page {
             lv_obj_clear_flag(this->compass, LV_OBJ_FLAG_SCROLLABLE);
             lv_img_set_zoom(this->compass, 64);
 
-            this->hamburger = this->createImage(&hamburgerImage, this->screen, LV_SIZE_CONTENT, LV_SIZE_CONTENT, 212, -93);
+            this->hamburger =
+                this->createImage(&hamburgerImage, this->screen, LV_SIZE_CONTENT, LV_SIZE_CONTENT, 212, -93);
             lv_obj_set_align(this->hamburger, LV_ALIGN_CENTER);
             lv_obj_add_flag(this->hamburger, LV_OBJ_FLAG_ADV_HITTEST);
             lv_obj_clear_flag(this->hamburger, LV_OBJ_FLAG_SCROLLABLE);
 
-            this->robotIndicator = this->createImage(&robotIndicatorImage, this->screen, LV_SIZE_CONTENT, LV_SIZE_CONTENT, -120 + translateIndicatorToPosition(pose.x), 0 + translateIndicatorToPosition(pose.y));
+            this->robotIndicator = this->createImage(&robotIndicatorImage, this->screen, LV_SIZE_CONTENT,
+                                                     LV_SIZE_CONTENT, -120 + translateIndicatorToPosition(pose.x),
+                                                     0 + translateIndicatorToPosition(pose.y));
             lv_obj_set_align(this->robotIndicator, LV_ALIGN_CENTER);
             lv_obj_add_flag(this->robotIndicator, LV_OBJ_FLAG_ADV_HITTEST);
             lv_obj_clear_flag(this->robotIndicator, LV_OBJ_FLAG_SCROLLABLE);
@@ -106,16 +110,15 @@ class OdometryPage : public Page {
     private:
         std::string getStringFromFloat(float value) {
             std::ostringstream stream;
-            stream << std::setprecision(5) << std::noshowpoint << (double) value;
+            stream << std::setprecision(5) << std::noshowpoint << (double)value;
             return stream.str();
         }
 
         std::string fancyTime(double ms) {
-            // convert ms to mm:ss, e.g. 1234 ms -> 00:01
-            int seconds = (int) std::round(ms / 1000);
+            int seconds = (int)std::round(ms / 1000);
             int minutes = seconds / 60;
             seconds %= 60;
-            
+
             std::ostringstream stream;
             stream << std::setfill('0') << std::setw(2) << minutes << ":" << std::setw(2) << seconds;
             return stream.str();
