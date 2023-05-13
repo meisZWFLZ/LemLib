@@ -1,16 +1,10 @@
-// SquareLine LVGL GENERATED FILE
-// EDITOR VERSION: SquareLine Studio 1.2.1
-// LVGL VERSION: 8.3.3
-// PROJECT: LemLib UI v0.1.0
-
 #include "lemlib/ui/pages/odometry/odometryPage.hpp"
 
 #ifndef LV_ATTRIBUTE_MEM_ALIGN
 #define LV_ATTRIBUTE_MEM_ALIGN
 #endif
 
-// IMAGE DATA: assets\compass.png
-const LV_ATTRIBUTE_MEM_ALIGN uint8_t ui_img_compass_png_data[] = {
+const LV_ATTRIBUTE_MEM_ALIGN uint8_t compassData[] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -12146,5 +12140,5 @@ const lv_img_dsc_t compassImage = {{
                                        240,
                                        240,
                                    },
-                                   sizeof(ui_img_compass_png_data),
-                                   ui_img_compass_png_data};
+                                   sizeof(compassData),
+                                   compassData};

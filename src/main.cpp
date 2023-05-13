@@ -31,12 +31,18 @@ lemlib::OdomSensors_t sensors {nullptr, nullptr, nullptr, nullptr, &imu};
 lemlib::Chassis chassis(drivetrain, lateralController, angularController, sensors);
 
 void initialize() {
+    chassis.setPose(25.3, -35.6, 93.1, false);
+
     lemlib::ui::Page* odometryPage = new lemlib::ui::pages::OdometryPage(&chassis);
 
     lemlib::ui::registerPage(odometryPage);
     lemlib::ui::setCurrentPage("Odometry");
 
     lemlib::ui::initialize();
+
+    pros::delay(1000);
+
+    chassis.setPose(25.3*2, -35.6*2, 93.1*2, false);
 
     // comment out for testing UI
     // pros::lcd::initialize();
