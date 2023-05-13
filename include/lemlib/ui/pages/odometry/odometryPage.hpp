@@ -31,8 +31,8 @@ class OdometryPage : public Page {
 
             lemlib::Pose pose = this->chassis->getPose(false);
 
-            std::string xValueString = getStringFromFloat(pose.x) + "\"";
-            std::string yValueString = getStringFromFloat(pose.y) + "\"";
+            std::string xValueString = getStringFromFloat(pose.x) + "in";
+            std::string yValueString = getStringFromFloat(pose.y) + "in";
             std::string tValueString = getStringFromFloat(pose.theta) + "°";
 
             lv_disp_t* display = lv_disp_get_default();
@@ -45,87 +45,29 @@ class OdometryPage : public Page {
             lv_obj_set_style_bg_color(this->screen, lv_color_hex(0x262626), LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_bg_opa(this->screen, 255, LV_PART_MAIN | LV_STATE_DEFAULT);    
 
-            // header
-            this->header = lv_label_create(this->screen);
-            lv_obj_set_width(this->header, LV_SIZE_CONTENT);
-            lv_obj_set_height(this->header, LV_SIZE_CONTENT);
-            lv_obj_set_x(this->header, 119);
-            lv_obj_set_y(this->header, -84);
-            lv_obj_set_align(this->header, LV_ALIGN_CENTER);
-            lv_label_set_text(this->header, "Odometry");
+            this->header = this->createLabel("Odometry", this->screen, 119, -84);
             lv_obj_set_style_text_font(this->header, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-            // xLabel
-            this->xLabel = lv_label_create(this->screen);
-            lv_obj_set_width(this->xLabel, LV_SIZE_CONTENT);
-            lv_obj_set_height(this->xLabel, LV_SIZE_CONTENT);
-            lv_obj_set_x(this->xLabel, 43);
-            lv_obj_set_y(this->xLabel, -37);
-            lv_obj_set_align(this->xLabel, LV_ALIGN_CENTER);
-            lv_label_set_text(this->xLabel, "X");
-
-            // yLabel
-            this->yLabel = lv_label_create(this->screen);
-            lv_obj_set_width(this->yLabel, LV_SIZE_CONTENT);
-            lv_obj_set_height(this->yLabel, LV_SIZE_CONTENT);
-            lv_obj_set_x(this->yLabel, 43);
-            lv_obj_set_y(this->yLabel, -14);
-            lv_obj_set_align(this->yLabel, LV_ALIGN_CENTER);
-            lv_label_set_text(this->yLabel, "Y");
-
-            // tLabel
-            this->tLabel = lv_label_create(this->screen);
-            lv_obj_set_width(this->tLabel, LV_SIZE_CONTENT);
-            lv_obj_set_height(this->tLabel, LV_SIZE_CONTENT);
-            lv_obj_set_x(this->tLabel, 43);
-            lv_obj_set_y(this->tLabel, 9);
-            lv_obj_set_align(this->tLabel, LV_ALIGN_CENTER);
-            lv_label_set_text(this->tLabel, "T");
+            this->xLabel = this->createLabel("X", this->screen, 43, -37);
+            this->yLabel = this->createLabel("Y", this->screen, 43, -14);
+            this->tLabel = this->createLabel("T", this->screen, 43, 9);
     
-            // xValue
-            this->xValue = lv_label_create(this->screen);
-            lv_obj_set_width(this->xValue, LV_SIZE_CONTENT);
-            lv_obj_set_height(this->xValue, LV_SIZE_CONTENT);
-            lv_obj_set_x(this->xValue, 73);
-            lv_obj_set_y(this->xValue, -37);
-            lv_obj_set_align(this->xValue, LV_ALIGN_CENTER);
-            lv_label_set_text(this->xValue, xValueString.c_str());
+            this->xValue = this->createLabel(xValueString, this->screen, 73, -37);
             lv_obj_set_style_text_color(this->xValue, lv_color_hex(0xA5A5A5), LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_text_opa(this->xValue, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_text_font(this->xValue, &lv_font_montserrat_10, LV_PART_MAIN | LV_STATE_DEFAULT);            
 
-            // yValue
-            this->yValue = lv_label_create(this->screen);
-            lv_obj_set_width(this->yValue, LV_SIZE_CONTENT);
-            lv_obj_set_height(this->yValue, LV_SIZE_CONTENT);
-            lv_obj_set_x(this->yValue, 73);
-            lv_obj_set_y(this->yValue, -14);
-            lv_obj_set_align(this->yValue, LV_ALIGN_CENTER);
-            lv_label_set_text(this->yValue, yValueString.c_str());
+            this->yValue = this->createLabel(yValueString, this->screen, 73, -14);
             lv_obj_set_style_text_color(this->yValue, lv_color_hex(0xA5A5A5), LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_text_opa(this->yValue, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_text_font(this->yValue, &lv_font_montserrat_10, LV_PART_MAIN | LV_STATE_DEFAULT);    
 
-            // tValue
-            this->tValue = lv_label_create(this->screen);
-            lv_obj_set_width(this->tValue, LV_SIZE_CONTENT);
-            lv_obj_set_height(this->tValue, LV_SIZE_CONTENT);
-            lv_obj_set_x(this->tValue, 73);
-            lv_obj_set_y(this->tValue, 9);
-            lv_obj_set_align(this->tValue, LV_ALIGN_CENTER);
-            lv_label_set_text(this->tValue, tValueString.c_str());
+            this->tValue = this->createLabel(tValueString, this->screen, 73, 9);
             lv_obj_set_style_text_color(this->tValue, lv_color_hex(0xA5A5A5), LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_text_opa(this->tValue, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_text_font(this->tValue, &lv_font_montserrat_10, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-            // timer 
-            this->timer = lv_label_create(this->screen);
-            lv_obj_set_width(this->timer, LV_SIZE_CONTENT);
-            lv_obj_set_height(this->timer, LV_SIZE_CONTENT);
-            lv_obj_set_x(this->timer, 23);
-            lv_obj_set_y(this->timer, 102);
-            lv_obj_set_align(this->timer, LV_ALIGN_CENTER);
-            lv_label_set_text(this->timer, this->fancyTime(this->chassis->getTime()).c_str());
+            this->timer = this->createLabel(this->fancyTime(this->chassis->getTime()), this->screen, 23, 102);
 
             // field image
             this->field = lv_img_create(this->screen);
@@ -212,7 +154,7 @@ class OdometryPage : public Page {
         void updateXValue() {
             lemlib::Pose pose = this->chassis->getPose(false);
 
-            std::string xValueString = getStringFromFloat(pose.x) + "\"";
+            std::string xValueString = getStringFromFloat(pose.x) + "in";
 
             lv_label_set_text(this->xValue, xValueString.c_str());
         }
@@ -220,7 +162,7 @@ class OdometryPage : public Page {
         void updateYValue() {
             lemlib::Pose pose = this->chassis->getPose(false);
 
-            std::string yValueString = getStringFromFloat(pose.y) + "\"";
+            std::string yValueString = getStringFromFloat(pose.y) + "in";
 
             lv_label_set_text(this->yValue, yValueString.c_str());
         }

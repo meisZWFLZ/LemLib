@@ -42,37 +42,37 @@ void initialize() {
 
     // testing code to see movement of odom screen
 
-    // double x = 0;
-    // double y = 0;
-    // double theta = 0;
+    double x = 0;
+    double y = 0;
+    double theta = 0;
 
-    // double xDirection = 1;
-    // double yDirection = 1;
-    // double thetaDirection = 1;
+    double xDirection = 1;
+    double yDirection = 1;
+    double thetaDirection = 1;
 
-    // while (true) {
-    //     if (xDirection == 1 ? x < 72 : x > -72) x += 1 * xDirection;
-    //     else {
-    //         x = 71 * xDirection;
-    //         xDirection *= -1;
-    //     }
+    while (true) {
+        if (xDirection == 1 ? x < 72 : x > -72) x += 0.96 * xDirection;
+        else {
+            x = 71 * xDirection;
+            xDirection *= -1;
+        }
 
-    //     if (yDirection == 1 ? y < 72 : y > -72) y += 1 * yDirection;
-    //     else {
-    //         y = 71 * yDirection;
-    //         yDirection *= -1;
-    //     }
+        if (yDirection == 1 ? y < 72 : y > -72) y += 0.96 * yDirection;
+        else {
+            y = 71 * yDirection;
+            yDirection *= -1;
+        }
 
-    //     if (thetaDirection == 1 ? theta < 360 : theta > -360) theta += 5 * thetaDirection;
-    //     else {
-    //         theta = 359 * thetaDirection;
-    //         thetaDirection *= -1;
-    //     }
+        if (thetaDirection == 1 ? theta < 360 : theta > -360) theta += 5 * thetaDirection;
+        else {
+            theta = 359 * thetaDirection;
+            thetaDirection *= -1;
+        }
 
-    //     chassis.setPose(x, y, theta, false);
+        chassis.setPose(x, y, theta, false);
 
-    //     pros::delay(25);
-    // }
+        pros::delay(25);
+    }
 
     // comment out for testing UI
     // pros::lcd::initialize();
