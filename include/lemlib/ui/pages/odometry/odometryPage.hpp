@@ -163,12 +163,12 @@ class OdometryPage : public Page {
             lv_img_set_src(this->robotIndicator, &robotIndicatorImage);
             lv_obj_set_width(this->robotIndicator, LV_SIZE_CONTENT);
             lv_obj_set_height(this->robotIndicator, LV_SIZE_CONTENT);
-            lv_obj_set_x(this->robotIndicator, -82);
-            lv_obj_set_y(this->robotIndicator, 58);
+            lv_obj_set_x(this->robotIndicator, -120 + translateIndicatorToPosition(pose.x));
+            lv_obj_set_y(this->robotIndicator, 0 + translateIndicatorToPosition(pose.y));
             lv_obj_set_align(this->robotIndicator, LV_ALIGN_CENTER);
             lv_obj_add_flag(this->robotIndicator, LV_OBJ_FLAG_ADV_HITTEST);
             lv_obj_clear_flag(this->robotIndicator, LV_OBJ_FLAG_SCROLLABLE);
-            lv_img_set_angle(this->robotIndicator, 936);
+            lv_img_set_angle(this->robotIndicator, translateIndicatorToAngle(pose.theta));
             lv_img_set_zoom(this->robotIndicator, 8);
 
             lv_disp_load_scr(this->screen);
@@ -180,6 +180,8 @@ class OdometryPage : public Page {
             this->updateXValue();
             this->updateYValue();
             this->updateTValue();
+
+            this->updateIndicator();
         }
 
         std::string getName() { return this->name; }
@@ -229,6 +231,18 @@ class OdometryPage : public Page {
             std::string tValueString = getStringFromFloat(pose.theta) + "°";
 
             lv_label_set_text(this->tValue, tValueString.c_str());
+        }
+
+        double translateIndicatorToPosition(double position) { return (120.0f / 72.0f) * position; }
+
+        double translateIndicatorToAngle(double angle) { return angle * 10; }
+
+        void updateIndicator() {
+            lemlib::Pose pose = this->chassis->getPose(false);
+
+            lv_obj_set_x(this->robotIndicator, -120 + translateIndicatorToPosition(pose.x));
+            lv_obj_set_y(this->robotIndicator, 0 + translateIndicatorToPosition(pose.y));
+            lv_img_set_angle(this->robotIndicator, translateIndicatorToAngle(pose.theta));
         }
 
         lv_obj_t* screen;

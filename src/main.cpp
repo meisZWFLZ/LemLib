@@ -31,7 +31,7 @@ lemlib::OdomSensors_t sensors {nullptr, nullptr, nullptr, nullptr, &imu};
 lemlib::Chassis chassis(drivetrain, lateralController, angularController, sensors);
 
 void initialize() {
-    chassis.setPose(25.3, -35.6, 93.1, false);
+    chassis.setPose(0, 0, 0, false);
 
     lemlib::ui::Page* odometryPage = new lemlib::ui::pages::OdometryPage(&chassis);
 
@@ -40,9 +40,39 @@ void initialize() {
 
     lemlib::ui::initialize();
 
-    pros::delay(1000);
+    // testing code to see movement of odom screen
 
-    chassis.setPose(25.3*2, -35.6*2, 93.1*2, false);
+    double x = 0;
+    double y = 0;
+    double theta = 0;
+
+    double xDirection = 1;
+    double yDirection = 1;
+    double thetaDirection = 1;
+
+    while (true) {
+        if (xDirection == 1 ? x < 72 : x > -72) x += 1 * xDirection;
+        else {
+            x = 71 * xDirection;
+            xDirection *= -1;
+        }
+
+        if (yDirection == 1 ? y < 72 : y > -72) y += 1 * yDirection;
+        else {
+            y = 71 * yDirection;
+            yDirection *= -1;
+        }
+
+        if (thetaDirection == 1 ? theta < 360 : theta > -360) theta += 5 * thetaDirection;
+        else {
+            theta = 359 * thetaDirection;
+            thetaDirection *= -1;
+        }
+
+        chassis.setPose(x, y, theta, false);
+
+        pros::delay(25);
+    }
 
     // comment out for testing UI
     // pros::lcd::initialize();
