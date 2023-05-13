@@ -2,6 +2,7 @@
 #include "lemlib/pose.hpp"
 #include "lemlib/ui/page.hpp"
 #include "liblvgl/lvgl.h"
+#include "liblvgl/misc/lv_area.h"
 
 #include <iomanip>
 #include <sstream>
@@ -39,7 +40,6 @@ class OdometryPage : public Page {
             lv_theme_t* theme = lv_theme_default_init(display, lv_palette_main(LV_PALETTE_BLUE), lv_palette_main(LV_PALETTE_RED), true, LV_FONT_DEFAULT);
             lv_disp_set_theme(display, theme);
 
-            // screen
             this->screen = lv_obj_create(NULL);
             lv_obj_clear_flag(this->screen, LV_OBJ_FLAG_SCROLLABLE);
             lv_obj_set_style_bg_color(this->screen, lv_color_hex(0x262626), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -69,44 +69,20 @@ class OdometryPage : public Page {
 
             this->timer = this->createLabel(this->fancyTime(this->chassis->getTime()), this->screen, 23, 102);
 
-            // field image
-            this->field = lv_img_create(this->screen);
-            lv_img_set_src(this->field, &fieldImage);
-            lv_obj_set_width(this->field, 240);
-            lv_obj_set_height(this->field, 240);
-            lv_obj_set_x(this->field, 0);
-            lv_obj_set_y(this->field, 0);
+            this->field = this->createImage(&fieldImage, this->screen, 240, 240, 0, 0);
 
-            // compass image
-            this->compass = lv_img_create(this->screen);
-            lv_img_set_src(this->compass, &compassImage);
-            lv_obj_set_width(this->compass, LV_SIZE_CONTENT);
-            lv_obj_set_height(this->compass, LV_SIZE_CONTENT);
-            lv_obj_set_x(this->compass, 208);
-            lv_obj_set_y(this->compass, 93);
+            this->compass = this->createImage(&compassImage, this->screen, LV_SIZE_CONTENT, LV_SIZE_CONTENT, 208, 93);
             lv_obj_set_align(this->compass, LV_ALIGN_CENTER);
             lv_obj_add_flag(this->compass, LV_OBJ_FLAG_ADV_HITTEST);
             lv_obj_clear_flag(this->compass, LV_OBJ_FLAG_SCROLLABLE);
             lv_img_set_zoom(this->compass, 64);
 
-            // hamburger image
-            this->hamburger = lv_img_create(this->screen);
-            lv_img_set_src(this->hamburger, &hamburgerImage);
-            lv_obj_set_width(this->hamburger, LV_SIZE_CONTENT);
-            lv_obj_set_height(this->hamburger, LV_SIZE_CONTENT);
-            lv_obj_set_x(this->hamburger, 212);
-            lv_obj_set_y(this->hamburger, -93);
+            this->hamburger = this->createImage(&hamburgerImage, this->screen, LV_SIZE_CONTENT, LV_SIZE_CONTENT, 212, -93);
             lv_obj_set_align(this->hamburger, LV_ALIGN_CENTER);
             lv_obj_add_flag(this->hamburger, LV_OBJ_FLAG_ADV_HITTEST);
             lv_obj_clear_flag(this->hamburger, LV_OBJ_FLAG_SCROLLABLE);
 
-            // robot indicator image
-            this->robotIndicator = lv_img_create(this->screen);
-            lv_img_set_src(this->robotIndicator, &robotIndicatorImage);
-            lv_obj_set_width(this->robotIndicator, LV_SIZE_CONTENT);
-            lv_obj_set_height(this->robotIndicator, LV_SIZE_CONTENT);
-            lv_obj_set_x(this->robotIndicator, -120 + translateIndicatorToPosition(pose.x));
-            lv_obj_set_y(this->robotIndicator, 0 + translateIndicatorToPosition(pose.y));
+            this->robotIndicator = this->createImage(&robotIndicatorImage, this->screen, LV_SIZE_CONTENT, LV_SIZE_CONTENT, -120 + translateIndicatorToPosition(pose.x), 0 + translateIndicatorToPosition(pose.y));
             lv_obj_set_align(this->robotIndicator, LV_ALIGN_CENTER);
             lv_obj_add_flag(this->robotIndicator, LV_OBJ_FLAG_ADV_HITTEST);
             lv_obj_clear_flag(this->robotIndicator, LV_OBJ_FLAG_SCROLLABLE);

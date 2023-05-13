@@ -33,6 +33,18 @@ class Page {
 
             return label;
         }
+
+        lv_obj_t* createImage(const lv_img_dsc_t* image, lv_obj_t* parent, int width, int height, int x, int y) {
+            lv_obj_t* img = lv_img_create(parent);
+        
+            lv_img_set_src(img, image);
+            lv_obj_set_width(img, width);
+            lv_obj_set_height(img, height);
+            lv_obj_set_x(img, x);
+            lv_obj_set_y(img, y);
+
+            return img;
+        }
 };
 } // namespace ui
 } // namespace lemlib
