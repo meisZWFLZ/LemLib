@@ -1,4 +1,4 @@
-#include "lemlib/ui/pages/odometry/odometryPage.hpp"
+#include "lemlib/ui/sidebar/sidebar.hpp"
 
 #ifndef LV_ATTRIBUTE_MEM_ALIGN
     #define LV_ATTRIBUTE_MEM_ALIGN
