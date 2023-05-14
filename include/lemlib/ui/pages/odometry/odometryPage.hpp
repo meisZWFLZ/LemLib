@@ -3,6 +3,7 @@
 #include "lemlib/ui/page.hpp"
 #include "lemlib/pose.hpp"
 #include "liblvgl/lvgl.h"
+#include "asset.h"
 
 #include <iomanip>
 #include <sstream>

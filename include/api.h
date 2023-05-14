@@ -81,4 +81,7 @@
 #include "pros/vision.hpp"
 #endif
 
+// ignore this error vscode retarded it compiles fine
+#include "asset.h"
+
 #endif  // _PROS_API_H_

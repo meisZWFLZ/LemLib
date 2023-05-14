@@ -38,6 +38,10 @@ EXCLUDE_SRC_FROM_LIB+=$(foreach file, $(SRCDIR)/main,$(foreach cext,$(CEXTS),$(f
 # that are in the the include directory get exported
 TEMPLATE_FILES=$(INCDIR)/lemlib/*.hpp  $(INCDIR)/lemlib/chassis/*.hpp
 
+##### ASSERT ADDON MODIFICATION START #####
+ASSET_FILES=$(wildcard static/*)
+##### ASSERT ADDON MODIFICATION END #####
+
 .DEFAULT_GOAL=quick
 
 ################################################################################
