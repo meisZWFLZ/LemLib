@@ -1,4 +1,5 @@
 #include "lemlib/ui/ui.hpp"
+#include <string>
 
 void lemlib::ui::registerPage(lemlib::ui::Page* page) {
     lemlib::ui::registeredPages[page->getName()] = page;
@@ -6,6 +7,10 @@ void lemlib::ui::registerPage(lemlib::ui::Page* page) {
 
 lemlib::ui::Page* lemlib::ui::getPage(std::string name) {
     return lemlib::ui::registeredPages[name];
+}
+
+std::string lemlib::ui::getCurrentPage() {
+    return lemlib::ui::currentPage;
 }
 
 void lemlib::ui::setCurrentPage(std::string name) {
@@ -32,4 +37,14 @@ void lemlib::ui::loop() {
 
 void lemlib::ui::initialize() {
     pros::Task task(lemlib::ui::loop);
+}
+
+std::vector<std::string> lemlib::ui::getRegisteredPageNames() {
+    std::vector<std::string> names = {};
+
+    for (auto const& [key, val] : lemlib::ui::registeredPages) {
+        names.push_back(key);
+    }
+
+    return names;
 }
