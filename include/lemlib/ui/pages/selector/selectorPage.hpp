@@ -1,5 +1,7 @@
 #pragma once
 
+#include "lemlib/chassis/chassis.hpp"
+#include "lemlib/ui/util.hpp"
 #include "lemlib/ui/page.hpp"
 
 namespace lemlib {
@@ -7,7 +9,7 @@ namespace ui {
 namespace pages {
 class AutonSelectorPage : public Page {
     public:
-        AutonSelectorPage();
+        AutonSelectorPage(lemlib::Chassis* chassis);
 
         void destroy();
 

@@ -1,13 +1,16 @@
 #pragma once
 
+#include "lemlib/chassis/chassis.hpp"
+#include "lemlib/ui/util.hpp"
 #include "lemlib/ui/page.hpp"
+
 
 namespace lemlib {
 namespace ui {
 namespace pages {
-class TerminalPage {
+class TerminalPage : public Page {
     public:
-        TerminalPage();
+        TerminalPage(lemlib::Chassis* chassis);
 
         void destroy();
 

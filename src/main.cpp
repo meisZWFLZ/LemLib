@@ -1,5 +1,10 @@
 #include "main.h"
 #include "lemlib/api.hpp"
+#include "lemlib/ui/pages/selector/selectorPage.hpp"
+#include "lemlib/ui/pages/settings/settingsPage.hpp"
+#include "lemlib/ui/pages/terminal/terminalPage.hpp"
+#include "lemlib/ui/pages/tuning/tuningPage.hpp"
+#include "lemlib/ui/ui.hpp"
 #include "pros/abstract_motor.hpp"
 
 // motor groups
@@ -33,12 +38,31 @@ lemlib::Chassis chassis(drivetrain, lateralController, angularController, sensor
 void initialize() {
     chassis.setPose(0, 0, 0, false);
 
+    lemlib::ui::Page* selectorPage = new lemlib::ui::pages::AutonSelectorPage(&chassis);
     lemlib::ui::Page* odometryPage = new lemlib::ui::pages::OdometryPage(&chassis);
+    lemlib::ui::Page* terminalPage = new lemlib::ui::pages::TerminalPage(&chassis);
+    lemlib::ui::Page* settingsPage = new lemlib::ui::pages::SettingsPage(&chassis);
+    lemlib::ui::Page* tuningPage = new lemlib::ui::pages::TuningPage(&chassis);
 
+    lemlib::ui::registerPage(selectorPage);
     lemlib::ui::registerPage(odometryPage);
-    lemlib::ui::setCurrentPage("Odometry");
+    lemlib::ui::registerPage(terminalPage);
+    lemlib::ui::registerPage(settingsPage);
+    lemlib::ui::registerPage(tuningPage);
 
+    lemlib::ui::setCurrentPage("Odometry");
     lemlib::ui::initialize();
+
+    // pros::delay(1000);
+
+
+    // for (int i = 0; i < lemlib::ui::getRegisteredPageNames().size(); i++) {
+    //     std::string name = lemlib::ui::getRegisteredPageNames()[i];
+
+    //     lemlib::ui::setCurrentPage(name);
+
+    //     pros::delay(1000);
+    // }
 
     // testing code to see movement of odom screen
 
