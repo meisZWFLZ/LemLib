@@ -18,19 +18,42 @@ void lemlib::ui::setCurrentPage(std::string name) {
 
     lemlib::ui::currentPage = name;
 
-    lemlib::ui::getPage(name)->initialize();
-
     std::cout << "Current Page: " << name << std::endl;
 }
 
 void lemlib::ui::loop() {
+    lv_disp_t* display = lv_disp_get_default();
+    lv_theme_t* theme = lv_theme_default_init(display, lv_palette_main(LV_PALETTE_BLUE),
+                                                lv_palette_main(LV_PALETTE_RED), true, LV_FONT_DEFAULT);
+    lv_disp_set_theme(display, theme);
+
+    lv_obj_t* screen = lv_obj_create(NULL);
+    lv_obj_clear_flag(screen, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_set_style_bg_color(screen, lv_color_hex(0x262626), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(screen, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    lv_disp_load_scr(screen);
+
+    std::string lastPage = "";
+
     while (true) {
         if (lemlib::ui::currentPage == "") {
             pros::delay(100);
             continue;
         }
 
+        if (lastPage != lemlib::ui::currentPage) {
+            if (lastPage != "") {
+                lemlib::ui::getPage(lastPage)->destroy();
+            }
+
+            lemlib::ui::getPage(lemlib::ui::currentPage)->initialize(screen);
+        }
+
         lemlib::ui::getPage(lemlib::ui::currentPage)->render();
+
+        lastPage = lemlib::ui::currentPage;
+
         pros::delay(50);
     }
 }

@@ -17,7 +17,7 @@ class Page {
         }
 
         virtual void render() = 0;
-        virtual void initialize() = 0;
+        virtual void initialize(lv_obj_t* screen) = 0;
         virtual void destroy() = 0;
 
         virtual std::string getName() = 0;

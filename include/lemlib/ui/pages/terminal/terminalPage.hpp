@@ -14,7 +14,7 @@ class TerminalPage : public Page {
 
         void destroy();
 
-        void initialize();
+        void initialize(lv_obj_t* screen);
 
         void render();
 
