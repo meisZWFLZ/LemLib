@@ -50,11 +50,11 @@ void initialize() {
     lemlib::ui::registerPage(settingsPage);
     lemlib::ui::registerPage(tuningPage);
 
-    lemlib::ui::setCurrentPage("Odometry");
     lemlib::ui::initialize();
 
-    // pros::delay(1000);
+    lemlib::ui::setCurrentPage("Odometry");
 
+    // pros::delay(1000);
 
     // for (int i = 0; i < lemlib::ui::getRegisteredPageNames().size(); i++) {
     //     std::string name = lemlib::ui::getRegisteredPageNames()[i];

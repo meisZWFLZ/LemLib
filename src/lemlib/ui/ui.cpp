@@ -14,6 +14,8 @@ std::string lemlib::ui::getCurrentPage() {
 }
 
 void lemlib::ui::setCurrentPage(std::string name) {
+    if (lemlib::ui::currentPage == name) return;
+
     if (lemlib::ui::currentPage != "") getPage(lemlib::ui::currentPage)->destroy();
 
     lemlib::ui::currentPage = name;
@@ -21,7 +23,7 @@ void lemlib::ui::setCurrentPage(std::string name) {
     std::cout << "Current Page: " << name << std::endl;
 }
 
-void lemlib::ui::loop() {
+lv_obj_t* createScreen() {
     lv_disp_t* display = lv_disp_get_default();
     lv_theme_t* theme = lv_theme_default_init(display, lv_palette_main(LV_PALETTE_BLUE),
                                                 lv_palette_main(LV_PALETTE_RED), true, LV_FONT_DEFAULT);
@@ -34,6 +36,12 @@ void lemlib::ui::loop() {
 
     lv_disp_load_scr(screen);
 
+    return screen;
+}
+
+void lemlib::ui::loop() {
+    lv_obj_t* screen = createScreen();
+
     std::string lastPage = "";
 
     while (true) {
@@ -45,6 +53,8 @@ void lemlib::ui::loop() {
         if (lastPage != lemlib::ui::currentPage) {
             if (lastPage != "") {
                 lemlib::ui::getPage(lastPage)->destroy();
+
+                screen = createScreen();
             }
 
             lemlib::ui::getPage(lemlib::ui::currentPage)->initialize(screen);

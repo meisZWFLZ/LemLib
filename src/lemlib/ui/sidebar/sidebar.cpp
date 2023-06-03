@@ -1,6 +1,7 @@
 #include "lemlib/ui/sidebar/sidebar.hpp"
 #include "lemlib/ui/page.hpp"
 #include "lemlib/ui/ui.hpp"
+#include "liblvgl/core/lv_event.h"
 #include "liblvgl/font/lv_font.h"
 
 using namespace lemlib::ui::sidebar;
@@ -10,6 +11,8 @@ Sidebar::Sidebar(lv_obj_t* screen, lv_obj_t* toggleButton, bool active) {
     this->toggleButton = toggleButton;
     this->active = active;
     this->elements = std::vector<lv_obj_t*>();
+    
+    buttonLabels = std::map<lv_obj_t*, lv_obj_t*>();
 
     this->render();
     // this->toggle(false);
@@ -29,34 +32,36 @@ void Sidebar::toggle(bool change) {
     std::cout << "Sidebar toggled, active: " << this->active << std::endl;
 }
 
-lv_obj_t* createPageButton(std::string name, lv_obj_t* screen, int x, int y, std::function<void()> callback, bool active = false) {
+lv_obj_t* Sidebar::createPageButton(std::string name, lv_obj_t* screen, int x, int y, lv_event_cb_t callback, bool active) {
     double PIXEL_WIDTH_PER_CHAR = 6.75;
     
-    if (active) {
-        double width = name.length() * PIXEL_WIDTH_PER_CHAR + 10;
+    double width = name.length() * PIXEL_WIDTH_PER_CHAR + 10;
 
-        lv_obj_t* activeButton = lv_btn_create(screen);
-        lv_obj_set_width(activeButton, width);
-        lv_obj_set_height(activeButton, 20);
-        lv_obj_set_x(activeButton, x);
-        lv_obj_set_y(activeButton, y);
-        lv_obj_set_align(activeButton, LV_ALIGN_CENTER);
-        lv_obj_add_flag(activeButton, LV_OBJ_FLAG_SCROLL_ON_FOCUS);
-        lv_obj_clear_flag(activeButton, LV_OBJ_FLAG_SCROLLABLE);
-        lv_obj_set_style_bg_color(activeButton, lv_color_hex(0x52CD27), LV_PART_MAIN | LV_STATE_DEFAULT);
-        lv_obj_set_style_bg_opa(activeButton, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-        lv_obj_set_style_text_color(activeButton, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-        lv_obj_set_style_text_opa(activeButton, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-        lv_obj_set_style_text_align(activeButton, LV_TEXT_ALIGN_AUTO, LV_PART_MAIN | LV_STATE_DEFAULT);
-        lv_obj_set_style_text_decor(activeButton, LV_TEXT_DECOR_NONE, LV_PART_MAIN | LV_STATE_DEFAULT);
-        lv_obj_set_style_text_font(activeButton, &lv_font_montserrat_10, LV_PART_MAIN | LV_STATE_DEFAULT);
-    }
+    lv_obj_t* button = lv_btn_create(screen);
+    lv_obj_set_width(button, width);
+    lv_obj_set_height(button, 20);
+    lv_obj_set_x(button, x);
+    lv_obj_set_y(button, y);
+    lv_obj_set_align(button, LV_ALIGN_CENTER);
+    lv_obj_add_flag(button, LV_OBJ_FLAG_SCROLL_ON_FOCUS);
+    lv_obj_clear_flag(button, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_set_style_bg_color(button, active ? lv_color_hex(0x52CD27) : lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(button, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_color(button, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(button, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_align(button, LV_TEXT_ALIGN_AUTO, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_decor(button, LV_TEXT_DECOR_NONE, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(button, &lv_font_montserrat_10, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    lv_obj_add_event_cb(button, callback, LV_EVENT_CLICKED, NULL);
     
     lv_obj_t* label = lemlib::ui::util::createLabel(name, screen, x, y);
     if (active) lv_obj_set_style_text_color(label, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(label, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_align(label, LV_TEXT_ALIGN_RIGHT, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(label, &lv_font_montserrat_10, LV_PART_MAIN | LV_STATE_DEFAULT);    
+
+    buttonLabels[button] = label;
 
     return label;
 }
@@ -130,21 +135,28 @@ void Sidebar::render() {
 
     std::vector<std::string> sorted = sortByLength(lemlib::ui::getRegisteredPageNames());
 
+    lv_event_cb_t callback = [](lv_event_t* event) {
+        lv_obj_t* button = lv_event_get_target(event);
+
+        lv_obj_t* label = buttonLabels[button];
+        std::string name = lv_label_get_text(label);
+
+        lemlib::ui::setCurrentPage(name);
+    };
+
     // loop over all registered pages
     for (int i = 0; i < sorted.size(); i++) {
         std::string name = sorted[i];
-
-        std::cout << "Found registered page: " << name << std::endl;
 
         lemlib::ui::Page* page = lemlib::ui::getPage(name);
 
         int x = page->getSidebarX();
         int y = page->getSidebarY();
 
-        lv_obj_t* button = createPageButton(name, this->screen, x, y, NULL, name == lemlib::ui::getCurrentPage());
+        lv_obj_t* button = createPageButton(name, this->screen, x, y, callback, name == lemlib::ui::getCurrentPage());
        
         this->elements.push_back(button);
     }
 
-    std::cout << "Sidebar rendered, " << this->elements.size() << " elemensts and " << sorted.size() << " pages" << std::endl;
+    std::cout << "Sidebar rendered, " << this->elements.size() << " elements and " << sorted.size() << " pages" << std::endl;
 }

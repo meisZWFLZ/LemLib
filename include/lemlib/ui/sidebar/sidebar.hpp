@@ -16,6 +16,8 @@ namespace lemlib {
 namespace ui {
 namespace sidebar {
 
+static std::map<lv_obj_t*, lv_obj_t*> buttonLabels = {};
+
 static double SCREEN_WIDTH = 480;
 static double SCREEN_HEIGHT = 240;
 
@@ -33,12 +35,15 @@ class Sidebar {
         void render();
 
     private:
+        lv_obj_t* createPageButton(std::string name, lv_obj_t* screen, int x, int y, lv_event_cb_t callback, bool active = false);
+
         lv_obj_t* screen;
         lv_obj_t* toggleButton;
         bool active;
 
         lv_obj_t* sidebar;
         std::vector<lv_obj_t*> elements;
+
 };
 } // namespace sidebar
 } // namespace ui
