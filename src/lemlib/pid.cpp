@@ -84,7 +84,6 @@ void lemlib::FAPID::setExit(float largeError, float smallError, int largeTime, i
 float lemlib::FAPID::update(float target, float position, bool log) {
     // check most recent input if logging is enabled
     // this does not run by default because the mutexes could slow down the program
-    if (log) { lemlib::FAPID::log(); }
     // calculate output
     float error = target - position;
     float deltaError = error - prevError;
@@ -93,6 +92,7 @@ float lemlib::FAPID::update(float target, float position, bool log) {
     prevOutput = output;
     prevError = error;
     totalError += error;
+
     return output;
 }
 
