@@ -2,7 +2,7 @@ name: Doxygen Action
 
 on:
   push:
-    branches: [ stable ]
+    branches: [ master ]
 
 
 
