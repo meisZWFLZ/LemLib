@@ -39,8 +39,11 @@ endforeach()
 include_directories(include)
 
 add_executable(LemLib
-  src/test.cpp
-        
+  include/lemlib/pose.hpp
+
+  src/lemlib/pose.cpp
+
+  test/pose.cpp
 )
 
 # Link against gtest
