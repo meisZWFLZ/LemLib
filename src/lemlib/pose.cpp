@@ -115,6 +115,29 @@ lemlib::Pose lemlib::Pose::rotate(float angle) {
                         this->x * std::sin(angle) + this->y * std::cos(angle), this->theta);
 }
 
+/**
+ * @brief Check that x, y, and theta are equal between two poses
+ *
+ * @param other the other pose
+ * @return bool
+ */
+bool lemlib::Pose::operator==(const lemlib::Pose& other) const {
+    return this->x == other.x && this->y == other.y && this->theta == other.theta;
+}
+/**
+ * @brief Check that x, y, and theta are NOT equal between two poses
+ *
+ * @param other the other pose
+ * @return bool
+ */
+bool lemlib::Pose::operator!=(const lemlib::Pose& other) const {
+    return !(*this == other);
+}
+
+std::ostream& lemlib::operator<<(std::ostream& os, const lemlib::Pose& pose) {
+    return os << lemlib::format_as(pose).c_str();
+}
+
 std::string lemlib::format_as(const lemlib::Pose& pose) {
     // the double brackets become single brackets
     return fmt::format("lemlib::Pose {{ x: {}, y: {}, theta: {} }}", pose.x, pose.y, pose.theta);
