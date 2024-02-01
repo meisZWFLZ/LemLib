@@ -12,3 +12,4 @@ jobs:
       - uses: meisZWFLZ/pros-depot-from-releases@e72dedb1a6b8b235f48ea9ce16e2921341d3be24
         with:
           token: ${{ github.token }}
+          repo: ${{ github.context.repo }}
