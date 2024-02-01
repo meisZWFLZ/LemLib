@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions: write-all
     steps:
-      - uses: meisZWFLZ/pros-depot-from-releases@e72dedb1a6b8b235f48ea9ce16e2921341d3be24
+      - uses: meisZWFLZ/pros-depot-from-releases@5d403a6bab3cb082edff63b1151a23b4f257ed9d
         with:
           token: ${{ github.token }}
           repo: ${{ github.context.repo }}
