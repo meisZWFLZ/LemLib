@@ -1,0 +1,14 @@
+name: Populate Depot json
+
+on: 
+  release:
+  workflow_dispatch:
+
+jobs:
+  populate:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - uses: meiszwlfz/pros-depot-from-releases@latest
+        with:
+          token: ${{ github.token }}
