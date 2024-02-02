@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions: write-all
     steps:
-      - uses: meisZWFLZ/pros-depot-from-releases@e73227af81548cc02c132877661a9fa7723acb46
+      - uses: meisZWFLZ/pros-depot-from-releases@401feb7f4b13e9b7f4f2265775e0cf4afa976974
         with:
           token: ${{ github.token }}
           repo: meiszwflz/LemLib
