@@ -14,4 +14,4 @@ jobs:
           token: ${{ github.token }}
           repo: meiszwflz/LemLib
           source-repo: LemLib/LemLib
-          readable: true
+          readable-json: true
