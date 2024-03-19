@@ -24,3 +24,5 @@ jobs:
           source-repo: LemLib/LemLib
           # makes the json output human readable
           readable-json: true
+          # test branch
+          branch: depot-2
