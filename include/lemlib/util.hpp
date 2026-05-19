@@ -1,94 +1,98 @@
-/**
- * @file include/lemlib/util.hpp
- * @author LemLib Team
- * @brief Utility functions declarations
- * @version 0.4.5
- * @date 2023-01-15
- *
- * @copyright Copyright (c) 2023
- *
- */
-
 #pragma once
 
-#include <vector>
-#include "lemlib/pose.hpp"
+#include "units/Pose.hpp"
 
 namespace lemlib {
 /**
- * @brief Slew rate limiter
+ * @brief AngularDirection
  *
- * @param target target value
- * @param current current value
- * @param maxChange maximum change. No maximum if set to 0
-
- * @return float - the limited value
+ * When turning, the user may want to specify the direction the robot should turn in.
+ * This enum class has 3 values: CW_CLOCKWISE, CCW_COUNTERCLOCKWISE, and AUTO
+ * AUTO will make the robot turn in the shortest direction, and will be the most used value
  */
-float slew(float target, float current, float maxChange);
+enum class AngularDirection { CW_CLOCKWISE, CCW_COUNTERCLOCKWISE };
 
 /**
- * @brief Convert radians to degrees
+ * @brief Calculate the error between two angles
  *
- * @param rad radians
- * @return float degrees
+ * @param target the target angle
+ * @param position the current angle
+ * @param direction which direction the robot should turn in. Defaults to AUTO
+ *
+ * @return Angle the error between the two angles
  */
-float radToDeg(float rad);
+Angle angleError(Angle target, Angle position, std::optional<AngularDirection> direction = std::nullopt);
 
 /**
- * @brief Convert degrees to radians
+ * @brief SlewDirection
  *
- * @param deg degrees
- * @return float radians
+ * Slew may only need to be applied when the value being slewed is increasing, decreasing.
+ * This enum class help make calls to slew more readable
  */
-float degToRad(float deg);
+enum class SlewDirection { INCREASING, DECREASING, ALL };
 
 /**
- * @brief Calculate the error between 2 angles. Useful when calculating the error between 2 headings
+ * @brief constrain the change in a value over time
  *
- * @param angle1
- * @param angle2
- * @param radians true if angle is in radians, false if not. False by default
- * @return float wrapped angle
+ * @param target the requested new value of the changing value
+ * @param current the value to be constrained
+ * @param maxChangeRate the maximum rate of change
+ * @param deltaTime the change in time since the last iteration
+ * @param directionLimit in which direction to restrict the change. All directions by default
+ *
+ * @return Number the value with the constrained change
+ *
+ * @b Example
+ * @code {.cpp}
+ * slew(20, 0, 10); // output: 10
+ * slew(20, 0, 10, SlewDirection::INCREASING); // output: 20
+ * slew(20, 0, 10, SlewDirection::DECREASING) // output: 10
+ * slew(20, 15, 10); // output: 20
+ * slew(-5, 10, 10); // output: 0
+ * slew(-5, 10, 10, SlewDirection::DECREASING); // output: -5
+ * @endcode
  */
-float angleError(float angle1, float angle2, bool radians = false);
+Number slew(Number target, Number current, Number maxChangeRate, Time deltaTime,
+            SlewDirection restrictDirection = SlewDirection::ALL);
 
 /**
- * @brief Return the sign of a number
+ * @brief Constrain a value so it's absolute value is greater than some value but less than some other value
  *
- * @param x the number to get the sign of
- * @return int - -1 if negative, 1 if positive
+ * @param value the value to constrain
+ * @param max the maximum absolute value
+ * @param min the minimum absolute value
+ *
+ * @return the constrained value
+ *
+ * @b Example:
+ * @code {.cpp}
+ * respectSpeeds(20, 5, 30); // output: 20
+ * respectSpeeds(0, 5, 30); // output: 5
+ * respectSpeeds(40, 5, 30); // output: 30
+ * respectSpeeds(-20, 5, 30); // output: -20
+ * respectSpeeds(-2, 5, 30); // output: -55
+ * respectSpeeds(-40, 5, 30); // output: -30
+ * @endcode
  */
-int sgn(float x);
+Number constrainPower(Number power, Number max, Number min);
+
+struct DriveOutputs {
+        Number left;
+        Number right;
+};
 
 /**
- * @brief Return the average of a vector of numbers
+ * @brief calculate desaturated motor outputs
  *
- * @param values
- * @return float
+ * Given a lateral output and an angular output, calculate the left and right side drivetrain velocities such that the
+ * drivetrain output does not exceed 1
+ *
+ * @param lateralOutput
+ * @param angularOutput
+ *
+ * @return DriveOutputs
  */
-float avg(std::vector<float> values);
+DriveOutputs desaturate(Number lateralOutput, Number angularOutput);
 
-/**
- * @brief Exponential moving average
- *
- * @param current current measurement
- * @param previous previous output
- * @param smooth smoothing factor (0-1). 1 means no smoothing, 0 means no change
- * @return float - the smoothed output
- */
-float ema(float current, float previous, float smooth);
-
-/**
- * @brief Get the signed curvature of a circle that intersects the first pose and the second pose
- *
- * @note The circle will be tangent to the theta value of the first pose
- * @note The curvature is signed. Positive curvature means the circle is going clockwise, negative means
- * counter-clockwise
- * @note Theta has to be in radians and in standard form. That means 0 is right and increases counter-clockwise
- *
- * @param pose the first pose
- * @param other the second pose
- * @return float curvature
- */
-float getCurvature(Pose pose, Pose other);
+Curvature getSignedTangentArcCurvature(units::Pose start, units::V2Position end);
 } // namespace lemlib
